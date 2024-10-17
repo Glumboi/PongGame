@@ -6,7 +6,7 @@
 #define SCORE_OFFSET_TOP 25
 #define ENEMY_SCORE_OFFSET_LEFT 75
 
-typedef struct ballAware
+typedef struct scoreObject
 {
     struct gameObject obj;
     int score;
@@ -14,12 +14,12 @@ typedef struct ballAware
 
 typedef struct player
 {
-    struct ballAware ballAware;
+    struct scoreObject scoreObject;
 } Player;
 
 typedef struct enemy
 {
-    struct ballAware ballAware;
+    struct scoreObject scoreObject;
 } Enemy;
 
 typedef struct ball
@@ -31,7 +31,6 @@ typedef struct ball
     float velocityX;
     float velocityY;
     float speed;
-    int score;
 } Ball;
 
 typedef struct scoreUi

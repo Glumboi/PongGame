@@ -32,15 +32,15 @@ void RenderBall(GameObject *obj)
         }
 
         // Move the ball
-        obj->location.x += b->velocityX * b->speed;
-        obj->location.y += b->velocityY * b->speed;
+        obj->location.x += b->velocityX * b->speed * GetScreenWidth() / WINDOW_WIDTH_SPEED_MULTIPLIER;
+        obj->location.y += b->velocityY * b->speed * GetScreenWidth() / WINDOW_WIDTH_SPEED_MULTIPLIER;
 
         // Check for collisions
         CheckBallPlayerCollision(b, b->enemy);
         CheckBallPlayerCollision(b, b->player);
 
         // Check for screen bounds collisions
-        if (obj->location.x < 0)
+        if (obj->location.x < 5)
         {
             b->velocityX = -b->velocityX;
             ResetBall(obj);
@@ -71,8 +71,7 @@ void StartBall(GameObject *obj)
     VALID_PTR(b);
     printf("Ball started!\n");
 
-    b->score = 0;
-    b->initLaunchDir = rand() % 360;
+    b->initLaunchDir = rand() % 180;
     printf("Random Launch Direction: %d degrees\n", b->initLaunchDir);
 
     float radians = b->initLaunchDir * (PI / 180.0f);
@@ -115,7 +114,6 @@ void ResetBall(GameObject *obj)
     Ball *b = GAME_OBJECT_AS(Ball *, obj);
     VALID_PTR(b);
 
-    b->score = 0;
     b->obj.location.x = GetScreenWidth() / 2;
     b->obj.location.y = GetScreenHeight() / 2;
 
@@ -142,7 +140,7 @@ void ResetBall(GameObject *obj)
     printf("Ball reset with new velocity (%f, %f)\n", b->velocityX, b->velocityY);
 }
 
-void CheckBallPlayerCollision(Ball *ball, BallAware *ballAware)
+void CheckBallPlayerCollision(Ball *ball, BallAware *scoreObject)
 {
     // Get ball's position and radius
     int ballX = ball->obj.location.x;
@@ -150,8 +148,8 @@ void CheckBallPlayerCollision(Ball *ball, BallAware *ballAware)
     int ballRadius = BALL_SIZE / 2;
 
     // Get player's position and dimensions
-    int playerX = ballAware->obj.location.x;
-    int playerY = ballAware->obj.location.y;
+    int playerX = scoreObject->obj.location.x;
+    int playerY = scoreObject->obj.location.y;
     int playerWidth = PLAYER_WIDTH;
     int playerHeight = PLAYER_HEIGHT;
 
@@ -183,7 +181,6 @@ void CheckBallPlayerCollision(Ball *ball, BallAware *ballAware)
         ball->velocityX = cos(angle) * speed;
         ball->velocityY = sin(angle) * speed;
 
-        // Optional: Adjust ball's position to prevent sticking
         if (ball->obj.location.x < playerX + playerWidth / 2)
         {
             ball->obj.location.x = playerX - BALL_SIZE / 2;
@@ -194,8 +191,8 @@ void CheckBallPlayerCollision(Ball *ball, BallAware *ballAware)
         }
 
         // Increment score and adjust speed
-        ballAware->score++;
-        ball->speed = BALL_SPEED + ball->score / 1.8f;
+        scoreObject->score++;
+        ball->speed = BALL_SPEED + scoreObject->score / 1.8f;
 
         printf("Collision detected with player!\n");
     }
