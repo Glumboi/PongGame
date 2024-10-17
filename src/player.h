@@ -11,8 +11,8 @@
 #define PLAYER_HEIGHT 200
 #define PLAYER_WIDTH 25
 
-void InitPlayer(Player *player, void *game);
-void InitPlayerEx(Player *player, void *game, int initX, int initY);
+void InitPlayer(Player *player, Game *game);
+void InitPlayerEx(Player *player, Game *game, int initX, int initY);
 
 void HandlePlayerMovement(GameObject *obj);
 void CheckPlayerScreenBounds(GameObject *obj);

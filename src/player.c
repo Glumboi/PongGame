@@ -1,12 +1,12 @@
 #include "player.h"
 
-void InitPlayer(Player *player, void *game)
+void InitPlayer(Player *player, Game *game)
 {
     Location dfL = {10, GetScreenHeight() / 2 - PLAYER_HEIGHT};
     InitPlayerEx(player, game, dfL.x, dfL.y);
 }
 
-void InitPlayerEx(Player *player, void *game, int initX, int initY)
+void InitPlayerEx(Player *player, Game *game, int initX, int initY)
 {
     if (!game)
         return;
@@ -18,7 +18,7 @@ void InitPlayerEx(Player *player, void *game, int initX, int initY)
     player->scoreObject.obj.isVisible = 1;
     player->scoreObject.obj.parentGame = game;
     player->scoreObject.score = 0;
-    GameAddGameObject((Game *)game, &player->scoreObject.obj);
+    GameAddGameObject(game, &player->scoreObject.obj);
 }
 
 void HandlePlayerMovement(GameObject *obj)

@@ -1,12 +1,12 @@
 #include "ball.h"
 
-void InitBall(Ball *ball, void *game)
+void InitBall(Ball *ball, Game *game)
 {
     Location dfL = {GetScreenWidth() / 2, GetScreenHeight() / 2};
     InitBallEx(ball, game, dfL.x, dfL.y);
 }
 
-void InitBallEx(Ball *ball, void *game, int initX, int initY)
+void InitBallEx(Ball *ball, Game *game, int initX, int initY)
 {
     if (!game)
         return;
@@ -17,7 +17,7 @@ void InitBallEx(Ball *ball, void *game, int initX, int initY)
     ball->obj.ObjectStart = StartBall;
     ball->obj.isVisible = 1;
     ball->obj.parentGame = game;
-    GameAddGameObject((Game *)game, &ball->obj);
+    GameAddGameObject(game, &ball->obj);
 }
 void RenderBall(GameObject *obj)
 {

@@ -1,12 +1,12 @@
 #include "enemy.h"
 
-void InitEnemy(Enemy *enemy, void *game)
+void InitEnemy(Enemy *enemy, Game *game)
 {
     Location dfL = {GetScreenWidth() - 35, GetScreenHeight() / 2 - ENEMY_HEIGHT};
     InitEnemyEx(enemy, game, dfL.x, dfL.y);
 }
 
-void InitEnemyEx(Enemy *enemy, void *game, int initX, int initY)
+void InitEnemyEx(Enemy *enemy, Game *game, int initX, int initY)
 {
     if (!game)
         return;
@@ -19,7 +19,7 @@ void InitEnemyEx(Enemy *enemy, void *game, int initX, int initY)
     enemy->scoreObject.obj.parentGame = game;
     enemy->scoreObject.score = 0;
 
-    GameAddGameObject((Game *)game, &enemy->scoreObject.obj);
+    GameAddGameObject(game, &enemy->scoreObject.obj);
 }
 
 void HandleEnemyMovement(GameObject *obj)

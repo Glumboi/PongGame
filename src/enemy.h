@@ -12,8 +12,8 @@
 #define ENEMY_HEIGHT 200
 #define ENEMY_WIDTH 25
 
-void InitEnemy(Enemy *enemy, void *game);
-void InitEnemyEx(Enemy *enemy, void *game, int initX, int initY);
+void InitEnemy(Enemy *enemy, Game *game);
+void InitEnemyEx(Enemy *enemy, Game *game, int initX, int initY);
 
 void HandleEnemyMovement(GameObject *obj);
 void CheckEnemyScreenBounds(GameObject *obj);

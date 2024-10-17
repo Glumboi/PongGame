@@ -13,8 +13,8 @@
 #define BALL_SPEED 2.5f
 #define WINDOW_WIDTH_SPEED_MULTIPLIER 500
 
-void InitBall(Ball *ball, void *game);
-void InitBallEx(Ball *ball, void *game, int initX, int initY);
+void InitBall(Ball *ball, Game *game);
+void InitBallEx(Ball *ball, Game *game, int initX, int initY);
 
 void RenderBall(GameObject *obj);
 void StartBall(GameObject *obj);
