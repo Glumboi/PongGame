@@ -19,6 +19,6 @@ void RenderBall(GameObject *obj);
 void StartBall(GameObject *obj);
 void ResetBall(GameObject *obj);
 
-int CheckBallPlayerCollision(Ball *ball, Player *player);
+void CheckBallPlayerCollision(Ball *ball, BallAware *ballAware);
 
 #endif

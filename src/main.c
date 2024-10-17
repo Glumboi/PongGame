@@ -3,6 +3,7 @@
 #include "game.h"
 #include "gameTypes.h"
 #include "player.h"
+#include "enemy.h"
 #include "ball.h"
 #include "scoreUi.h"
 
@@ -16,11 +17,14 @@ int WinMain(int argc, char const *argv[])
     Player p;
     InitPlayer(&p, &g);
 
+    Enemy e;
+    InitEnemy(&e, &g);
+
     Ball b;
     InitBall(&b, &g);
 
-    ScoreUi ui;
-    InitScoreUi(&ui, &g);
+    //ScoreUi ui;
+    //InitScoreUi(&ui, &g);
 
     StartGame(&g);
 

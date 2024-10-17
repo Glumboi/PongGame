@@ -10,14 +10,15 @@ void InitPlayerEx(Player *player, void *game, int initX, int initY)
 {
     if (!game)
         return;
-    player->obj.name = "Player";
-    player->obj.location.x = initX;
-    player->obj.location.y = initY;
-    player->obj.ObjectRender = RenderPlayer;
-    player->obj.ObjectStart = StartPlayer;
-    player->obj.isVisible = 1;
-    player->obj.parentGame = game;
-    GameAddGameObject((Game *)game, &player->obj);
+    player->ballAware.obj.name = "Player";
+    player->ballAware.obj.location.x = initX;
+    player->ballAware.obj.location.y = initY;
+    player->ballAware.obj.ObjectRender = RenderPlayer;
+    player->ballAware.obj.ObjectStart = StartPlayer;
+    player->ballAware.obj.isVisible = 1;
+    player->ballAware.obj.parentGame = game;
+    player->ballAware.score = 0;
+    GameAddGameObject((Game *)game, &player->ballAware.obj);
 }
 
 void HandlePlayerMovement(GameObject *obj)
@@ -44,8 +45,14 @@ void RenderPlayer(GameObject *obj)
     CheckPlayerScreenBounds(obj);
 
     // Render
-    if (obj->isVisible)
-        DrawRoundedRectangle(obj->location.x, obj->location.y, PLAYER_WIDTH, PLAYER_HEIGHT, 10, WHITE);
+    Player* player = (Player*)obj;
+    if (player->ballAware.obj.isVisible)
+    {
+        DrawRoundedRectangle(player->ballAware.obj.location.x, player->ballAware.obj.location.y, PLAYER_WIDTH, PLAYER_HEIGHT, 10, WHITE);
+        DrawText(TextFormat("Score: %d", player->ballAware.score), 
+        player->ballAware.obj.location.x, 
+        player->ballAware.obj.location.y - SCORE_OFFSET_TOP, 24, WHITE);
+    }
 }
 
 void StartPlayer(GameObject *obj)

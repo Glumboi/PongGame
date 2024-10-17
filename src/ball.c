@@ -19,7 +19,6 @@ void InitBallEx(Ball *ball, void *game, int initX, int initY)
     ball->obj.parentGame = game;
     GameAddGameObject((Game *)game, &ball->obj);
 }
-
 void RenderBall(GameObject *obj)
 {
     if (obj->isVisible)
@@ -32,73 +31,33 @@ void RenderBall(GameObject *obj)
             return;
         }
 
-        printf("Velocity: (%f, %f), Speed: %f\n", b->velocityX, b->velocityY, b->speed);
-
-        // Move the ball according to its velocity and speed
+        // Move the ball
         obj->location.x += b->velocityX * b->speed;
         obj->location.y += b->velocityY * b->speed;
 
-        printf("Ball position updated to (%d, %d)\n", obj->location.x, obj->location.y);
+        // Check for collisions
+        CheckBallPlayerCollision(b, b->enemy);
+        CheckBallPlayerCollision(b, b->player);
 
-        // Check collision with player
-        if (CheckBallPlayerCollision(b, b->player))
+        // Check for screen bounds collisions
+        if (obj->location.x < 0)
         {
-            printf("Collision detected with player!\n");
-            b->score++;
-            b->speed = BALL_SPEED + b->score / 1.8f;
-
-            // Reflect ball velocity upon collision with player
-            float playerCenterX = b->player->obj.location.x + PLAYER_WIDTH / 2;
-            float playerCenterY = b->player->obj.location.y + PLAYER_HEIGHT / 2;
-
-            // Calculate the angle of incidence based on the ball's position relative to the player
-            float dx = obj->location.x - playerCenterX;
-            float dy = obj->location.y - playerCenterY;
-            float angle = atan2(dy, dx);
-
-            // Adjust velocity based on the angle of collision
-            float speed = sqrt(b->velocityX * b->velocityX + b->velocityY * b->velocityY);
-            b->velocityX = cos(angle) * speed;
-            b->velocityY = sin(angle) * speed;
-
-            // Optional: Adjust position to avoid the ball 'sticking' to the player
-            if (b->obj.location.x < b->player->obj.location.x + PLAYER_WIDTH / 2)
-            {
-                b->obj.location.x = b->player->obj.location.x - BALL_SIZE / 2;
-            }
-            else
-            {
-                b->obj.location.x = b->player->obj.location.x + PLAYER_WIDTH + BALL_SIZE / 2;
-            }
+            b->velocityX = -b->velocityX;
+            ResetBall(obj); 
+        }
+        else if (obj->location.x + BALL_SIZE > GetScreenWidth())
+        {
+            b->velocityX = -b->velocityX;
+            ResetBall(obj);
         }
 
-        // Left bound collision
-        if (obj->location.x < 5)
-        {
-            obj->location.x = 0;          // Reset position to the left bound
-            b->velocityX = -b->velocityX; // Reverse velocity on X-axis
-            ResetBall(obj);               // Reset ball when it hits the left bound
-        }
-
-        // Right bound collision
-        if (obj->location.x + BALL_SIZE > GetScreenWidth())
-        {
-            obj->location.x = GetScreenWidth() - BALL_SIZE; // Reset position to the right bound
-            b->velocityX = -b->velocityX;                   // Reverse velocity on X-axis
-        }
-
-        // Top bound collision
         if (obj->location.y < 0)
         {
-            obj->location.y = 0;
-            b->velocityY = -b->velocityY; // Reflect ball off the top bound
+            b->velocityY = -b->velocityY;
         }
-
-        // Bottom bound collision
-        if (obj->location.y + BALL_SIZE > GetScreenHeight())
+        else if (obj->location.y + BALL_SIZE > GetScreenHeight())
         {
-            obj->location.y = GetScreenHeight() - BALL_SIZE;
-            b->velocityY = -b->velocityY; // Reflect ball off the bottom bound
+            b->velocityY = -b->velocityY;
         }
 
         // Draw the ball at the updated position
@@ -142,18 +101,13 @@ void StartBall(GameObject *obj)
     printf("Ball launched at %d degrees with velocity (%f, %f)\n",
            b->initLaunchDir, b->velocityX, b->velocityY);
 
-    // Find the Player and assign it to the ball
     Game *g = (Game *)obj->parentGame;
-    GameObject *playerObj = NULL;
-    if (FindGameObject(g, &playerObj, "Player"))
-    {
-        b->player = (Player *)playerObj;
+
+    if (FindGameObject(g, &b->player, "Player"))
         printf("Player found and assigned to Ball!\n");
-    }
-    else
-    {
-        printf("Error: Player not found, ball won't have a player reference.\n");
-    }
+
+    if (FindGameObject(g, &b->enemy, "Enemy"))
+        printf("Enemy found and assigned to Ball!\n");
 }
 
 void ResetBall(GameObject *obj)
@@ -188,7 +142,7 @@ void ResetBall(GameObject *obj)
     printf("Ball reset with new velocity (%f, %f)\n", b->velocityX, b->velocityY);
 }
 
-int CheckBallPlayerCollision(Ball *ball, Player *player)
+void CheckBallPlayerCollision(Ball *ball, BallAware *ballAware)
 {
     // Get ball's position and radius
     int ballX = ball->obj.location.x;
@@ -196,30 +150,53 @@ int CheckBallPlayerCollision(Ball *ball, Player *player)
     int ballRadius = BALL_SIZE / 2;
 
     // Get player's position and dimensions
-    int playerX = player->obj.location.x;
-    int playerY = player->obj.location.y;
+    int playerX = ballAware->obj.location.x;
+    int playerY = ballAware->obj.location.y;
     int playerWidth = PLAYER_WIDTH;
     int playerHeight = PLAYER_HEIGHT;
 
     // Find the closest point on the player rectangle to the ball center
-    int closestX = ballX;
-    int closestY = ballY;
+    int closestX = (ballX < playerX) ? playerX : (ballX > playerX + playerWidth) ? playerX + playerWidth
+                                                                                 : ballX;
+    int closestY = (ballY < playerY) ? playerY : (ballY > playerY + playerHeight) ? playerY + playerHeight
+                                                                                  : ballY;
 
-    if (ballX < playerX)
-        closestX = playerX; // Ball is to the left of the player
-    else if (ballX > playerX + playerWidth)
-        closestX = playerX + playerWidth; // Ball is to the right of the player
-
-    if (ballY < playerY)
-        closestY = playerY; // Ball is above the player
-    else if (ballY > playerY + playerHeight)
-        closestY = playerY + playerHeight; // Ball is below the player
-
-    // Calculate the distance between the ball's center and the closest point on the player rectangle
+    // Calculate the distance between the ball's center and the closest point
     int dx = ballX - closestX;
     int dy = ballY - closestY;
-    float distanceSquared = dx * dx + dy * dy; // Use squared distance to avoid floating-point operations
+    int distanceSquared = dx * dx + dy * dy;
 
-    // Check if the distance is less than or equal to the ball's radius squared
-    return distanceSquared <= (ballRadius * ballRadius);
+    // If the distance is less than the ball's radius, a collision has occurred
+    if (distanceSquared < ballRadius * ballRadius)
+    {
+        // Reflect ball velocity upon collision with player
+        float playerCenterX = playerX + playerWidth / 2;
+        float playerCenterY = playerY + playerHeight / 2;
+
+        // Calculate angle of reflection
+        float dx = ballX - playerCenterX;
+        float dy = ballY - playerCenterY;
+        float angle = atan2(dy, dx);
+
+        // Adjust velocity based on the angle
+        float speed = sqrt(ball->velocityX * ball->velocityX + ball->velocityY * ball->velocityY);
+        ball->velocityX = cos(angle) * speed;
+        ball->velocityY = sin(angle) * speed;
+
+        // Optional: Adjust ball's position to prevent sticking
+        if (ball->obj.location.x < playerX + playerWidth / 2)
+        {
+            ball->obj.location.x = playerX - BALL_SIZE / 2;
+        }
+        else
+        {
+            ball->obj.location.x = playerX + playerWidth + BALL_SIZE / 2;
+        }
+
+        // Increment score and adjust speed
+        ballAware->score++;
+        ball->speed = BALL_SPEED + ball->score / 1.8f;
+
+        printf("Collision detected with player!\n");
+    }
 }
