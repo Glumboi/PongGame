@@ -5,7 +5,6 @@
 #include "player.h"
 #include "enemy.h"
 #include "ball.h"
-#include "scoreUi.h"
 
 int WinMain(int argc, char const *argv[])
 {
@@ -23,11 +22,7 @@ int WinMain(int argc, char const *argv[])
     Ball b;
     InitBall(&b, &g);
 
-    //ScoreUi ui;
-    //InitScoreUi(&ui, &g);
-
     StartGame(&g);
-
     while (!WindowShouldClose())
     {
         GameRender(&g);

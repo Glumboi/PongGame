@@ -32,7 +32,7 @@ typedef struct g_vector
     {                                           \
         struct g_vector_head head;              \
         vectorType *rawMem;                     \
-    };
+    }
 
 #define G_VECTOR_OPAGUE(type, name) \
     struct name                     \

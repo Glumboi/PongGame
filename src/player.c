@@ -45,13 +45,13 @@ void RenderPlayer(GameObject *obj)
     CheckPlayerScreenBounds(obj);
 
     // Render
-    Player* player = (Player*)obj;
+    Player *player = (Player *)obj;
     if (player->ballAware.obj.isVisible)
     {
         DrawRoundedRectangle(player->ballAware.obj.location.x, player->ballAware.obj.location.y, PLAYER_WIDTH, PLAYER_HEIGHT, 10, WHITE);
-        DrawText(TextFormat("Score: %d", player->ballAware.score), 
-        player->ballAware.obj.location.x, 
-        player->ballAware.obj.location.y - SCORE_OFFSET_TOP, 24, WHITE);
+        DrawText(TextFormat("Score: %d", player->ballAware.score),
+                 player->ballAware.obj.location.x,
+                 player->ballAware.obj.location.y - SCORE_OFFSET_TOP, 24, WHITE);
     }
 }
 

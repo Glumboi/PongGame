@@ -43,7 +43,7 @@ void RenderBall(GameObject *obj)
         if (obj->location.x < 0)
         {
             b->velocityX = -b->velocityX;
-            ResetBall(obj); 
+            ResetBall(obj);
         }
         else if (obj->location.x + BALL_SIZE > GetScreenWidth())
         {

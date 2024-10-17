@@ -2,7 +2,7 @@
 
 void *ReallocDebug(void *dst, size_t newSize)
 {
-    printf("{g_vector} Reallocating memory [%d bytes]\n", newSize);
+    printf("{g_vector} Reallocating memory [%lld bytes]\n", newSize);
     return realloc(dst, newSize);
 }
 
@@ -11,10 +11,10 @@ void *MallocDebug(size_t size)
     void *ret = malloc(size);
     if (!ret)
     {
-        printf("{g_vector} failed to allocate memory [%d bytes]!\n");
+        printf("{g_vector} failed to allocate memory [%lld bytes]!\n", size);
         return NULL;
     }
-    printf("{g_vector} Allocated memory [%d bytes]\n", size);
+    printf("{g_vector} Allocated memory [%lld bytes]\n", size);
     return ret;
 }
 

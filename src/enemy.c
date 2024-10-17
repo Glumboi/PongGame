@@ -49,9 +49,9 @@ void RenderEnemy(GameObject *obj)
     if (enemy->ballAware.obj.isVisible)
     {
         DrawRoundedRectangle(enemy->ballAware.obj.location.x, enemy->ballAware.obj.location.y, ENEMY_WIDTH, ENEMY_HEIGHT, 10, WHITE);
-        DrawText(TextFormat("Score: %d", enemy->ballAware.score), 
-        enemy->ballAware.obj.location.x - ENEMY_SCORE_OFFSET_LEFT, 
-        enemy->ballAware.obj.location.y - SCORE_OFFSET_TOP, 24, WHITE);
+        DrawText(TextFormat("Score: %d", enemy->ballAware.score),
+                 enemy->ballAware.obj.location.x - ENEMY_SCORE_OFFSET_LEFT,
+                 enemy->ballAware.obj.location.y - SCORE_OFFSET_TOP, 24, WHITE);
     }
 }
 
