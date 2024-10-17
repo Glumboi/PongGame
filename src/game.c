@@ -8,9 +8,6 @@ void InitGame(Game *outGame, WindowData *windowData)
     SetConfigFlags(windowData->flags);
     InitWindow(windowData->w, windowData->h, windowData->title);
 
-    // Initialize game object pool
-    G_VECTOR_INIT(GameObject *, outGame->objectPool, 0);
-
     if (!outGame->objectPool.rawMem)
     {
         printf("Failed to allocate memory for game object pool.\n");

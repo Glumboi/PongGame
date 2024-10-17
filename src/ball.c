@@ -117,7 +117,7 @@ void ResetBall(GameObject *obj)
     b->obj.location.x = GetScreenWidth() / 2;
     b->obj.location.y = GetScreenHeight() / 2;
 
-    b->initLaunchDir = rand() % 360;
+    b->initLaunchDir = rand() % 180;
     printf("Ball reset with random launch direction: %d degrees\n", b->initLaunchDir);
 
     float radians = b->initLaunchDir * (PI / 180.0f);
