@@ -12,11 +12,6 @@ void Player_Init(Player *player)
     player->moveSpeed = PLAYER_SPEED;
 }
 
-void Player_OnStart(GameObject *obj)
-{
-    printf("Player started!\n");
-}
-
 void Player_OnUpdate(GameObject *obj)
 {
     Player_HandleMovement(obj, KEY_W, KEY_S);

@@ -8,7 +8,7 @@
 
 #include "playerShared.h"
 
-void Player_Init(Player *player);
+void Player_Init(struct player *player);
 
 void Player_OnStart(GameObject *obj);
 void Player_OnUpdate(GameObject *obj);

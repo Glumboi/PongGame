@@ -7,6 +7,7 @@ void PongBall_Init(PongBall *ball)
     ball->obj = GameObject_NewName("Ball");
     ball->obj.OnUpdate = PongBall_OnUpdate;
     ball->obj.OnStart = PongBall_OnStart;
+    ball->hasAnyPlayerPressedAButton = 0;
     ball->velocityX = 0;
     ball->velocityY = 0;
     ball->moveSpeed = 0;
@@ -58,9 +59,21 @@ void PongBall_OnUpdate(GameObject *obj)
     if (!obj)
         return;
 
+    PongBall *ball = (PongBall *)obj;
+    if (IsKeyPressed(GetKeyPressed()))
+    {
+        ball->hasAnyPlayerPressedAButton = 1;
+    }
+
     if (obj->isVisible)
     {
-        PongBall *ball = (PongBall *)obj;
+        if (!ball->hasAnyPlayerPressedAButton)
+        {
+            DrawText("Any player press a button to start",
+                     GetScreenWidth() / 2 - 310,
+                     GetScreenHeight() / 2 + 20, 35, WHITE);
+            return;
+        }
         if (isnan(ball->velocityX) || isnan(ball->velocityY))
         {
             printf("Error: Invalid velocity values\n");
@@ -68,7 +81,7 @@ void PongBall_OnUpdate(GameObject *obj)
         }
 
         // Move the ball
-        obj->location.x += ball->velocityX * ball->moveSpeed  * GetScreenWidth() * GetFrameTime() / WINDOW_WIDTH_SPEED_MULTIPLIER;
+        obj->location.x += ball->velocityX * ball->moveSpeed * GetScreenWidth() * GetFrameTime() / WINDOW_WIDTH_SPEED_MULTIPLIER;
         obj->location.y += ball->velocityY * ball->moveSpeed * GetScreenWidth() * GetFrameTime() / WINDOW_WIDTH_SPEED_MULTIPLIER;
 
         // Check for collisions
@@ -104,10 +117,10 @@ void PongBall_OnUpdate(GameObject *obj)
 void PongBall_Reset(GameObject *obj)
 {
     PongBall *ball = (PongBall *)obj;
-
     ball->obj.location.x = GetScreenWidth() / 2;
     ball->obj.location.y = GetScreenHeight() / 2;
 
+    ball->hasAnyPlayerPressedAButton = 0;
     ball->initLaunchDir = rand() % 180;
     printf("Ball reset with random launch direction: %d degrees\n", ball->initLaunchDir);
 
@@ -178,7 +191,7 @@ void PongBall_CollisionChecks(GameObject *ballObj, GameObject *targetObject)
 
         // player->score++;
         ball->lastHittingPlayer = player;
-        ball->moveSpeed += 0.1;
+        ball->moveSpeed += 30;
 
         // Move the ball outside the player's bounds based on ball's direction
         if (ball->velocityX > 0)

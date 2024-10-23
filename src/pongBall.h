@@ -18,6 +18,8 @@
 #define BALL_SPEED 400.0f
 #define WINDOW_WIDTH_SPEED_MULTIPLIER 500
 
+extern struct player;
+
 typedef struct pongBall
 {
     GameObject obj;
@@ -26,11 +28,12 @@ typedef struct pongBall
     float velocityX;
     float velocityY;
     float moveSpeed;
+    uint8_t hasAnyPlayerPressedAButton;
 
     GameObject *player;
     GameObject *player2;
 
-    Player *lastHittingPlayer;
+    struct player *lastHittingPlayer;
 } PongBall;
 
 // Standard functions

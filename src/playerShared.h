@@ -5,10 +5,12 @@
 
 #include "../engineCore/gameObject.h"
 
+#include "pongBall.h"
+
 #define PLAYER_HEIGHT 200
 #define PLAYER_WIDTH 25
 #define SCORE_OFFSET_TOP 25
-#define PLAYER_SPEED 750
+#define PLAYER_SPEED 800
 
 typedef struct player
 {
@@ -45,4 +47,7 @@ inline void DrawRoundedRectangle(int x, int y, int width, int height, int radius
     DrawCircle(x + radius, y + height - radius, radius, color);         // Bottom-left corner
     DrawCircle(x + width - radius, y + height - radius, radius, color); // Bottom-right corner
 }
+
+void Player_OnStart(GameObject *obj);
+
 #endif
