@@ -17,7 +17,7 @@ typedef struct player
 
 inline void Player_HandleMovement(GameObject *obj, KeyboardKey up, KeyboardKey down)
 {
-    int moveSpeed = GetScreenWidth() / 150 ;
+    int moveSpeed = 8; 
 
     if (IsKeyDown(up))
         obj->location.y -= moveSpeed;
