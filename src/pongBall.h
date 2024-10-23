@@ -9,6 +9,7 @@
 #include <math.h>
 
 #include "../engineCore/scene.h"
+#include "../engineCore/engineTypes.h"
 #include "../engineCore/gameObject.h"
 
 #include "player.h"
@@ -27,7 +28,9 @@ typedef struct pongBall
     float speed;
 
     GameObject *player;
-    GameObject *enemy;
+    GameObject *player2;
+
+    Player **lastHittingPlayer;
 } PongBall;
 
 // Standard functions

@@ -23,7 +23,7 @@ void PongBall_OnStart(GameObject *obj)
     PongBall *ball = (PongBall *)obj;
 
     Scene_FindGameObject(obj->parentScene, &ball->player, "Player1", 1);
-    Scene_FindGameObject(obj->parentScene, &ball->enemy, "Player2", 1);
+    Scene_FindGameObject(obj->parentScene, &ball->player2, "Player2", 1);
 
     ball->initLaunchDir = rand() % 180;
 
@@ -74,7 +74,7 @@ void PongBall_OnUpdate(GameObject *obj)
 
         // Check for collisions
         PongBall_CollisionChecks(obj, ball->player);
-        PongBall_CollisionChecks(obj, ball->enemy);
+        PongBall_CollisionChecks(obj, ball->player2);
 
         // Check for screen bounds collisions
         if (obj->location.x < 5)
@@ -130,6 +130,9 @@ void PongBall_Reset(GameObject *obj)
 
     ball->speed = BALL_SPEED;
     printf("Ball reset with new velocity (%f, %f)\n", ball->velocityX, ball->velocityY);
+
+    if (ball->lastHittingPlayer)
+        ((Player *)ball->lastHittingPlayer)->score++;
 }
 
 void PongBall_CollisionChecks(GameObject *ballObj, GameObject *targetObject)
@@ -174,7 +177,8 @@ void PongBall_CollisionChecks(GameObject *ballObj, GameObject *targetObject)
             ball->velocityY /= length;
         }
 
-        player->score++;
+        // player->score++;
+        ball->lastHittingPlayer = player;
         ball->speed += 0.1;
 
         // Move the ball outside the player's bounds based on ball's direction

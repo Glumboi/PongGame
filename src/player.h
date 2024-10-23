@@ -2,6 +2,7 @@
 #define PLAYER_H
 
 #include <raylib.h>
+#include <stdio.h>
 
 #include "../engineCore/gameObject.h"
 
