@@ -9,7 +9,7 @@ void PongBall_Init(PongBall *ball)
     ball->obj.OnStart = PongBall_OnStart;
     ball->velocityX = 0;
     ball->velocityY = 0;
-    ball->speed = 0;
+    ball->moveSpeed = 0;
     ball->player = NULL;
 }
 
@@ -45,8 +45,7 @@ void PongBall_OnStart(GameObject *obj)
         return;
     }
 
-    ball->speed = BALL_SPEED;
-
+    ball->moveSpeed = BALL_SPEED;
     ball->obj.location.x = GetScreenWidth() / 2;
     ball->obj.location.y = GetScreenHeight() / 2;
 
@@ -69,8 +68,8 @@ void PongBall_OnUpdate(GameObject *obj)
         }
 
         // Move the ball
-        obj->location.x += ball->velocityX * ball->speed * GetScreenWidth() / WINDOW_WIDTH_SPEED_MULTIPLIER;
-        obj->location.y += ball->velocityY * ball->speed * GetScreenWidth() / WINDOW_WIDTH_SPEED_MULTIPLIER;
+        obj->location.x += ball->velocityX * ball->moveSpeed  * GetScreenWidth() * GetFrameTime() / WINDOW_WIDTH_SPEED_MULTIPLIER;
+        obj->location.y += ball->velocityY * ball->moveSpeed * GetScreenWidth() * GetFrameTime() / WINDOW_WIDTH_SPEED_MULTIPLIER;
 
         // Check for collisions
         PongBall_CollisionChecks(obj, ball->player);
@@ -128,7 +127,7 @@ void PongBall_Reset(GameObject *obj)
         return;
     }
 
-    ball->speed = BALL_SPEED;
+    ball->moveSpeed = BALL_SPEED;
     printf("Ball reset with new velocity (%f, %f)\n", ball->velocityX, ball->velocityY);
 
     if (ball->lastHittingPlayer)
@@ -165,11 +164,11 @@ void PongBall_CollisionChecks(GameObject *ballObj, GameObject *targetObject)
         // Collision detected, reverse ball direction
         ball->velocityX = -ball->velocityX;
 
-        // Adjust ball speed or direction based on collision point
+        // Adjust ball moveSpeed or direction based on collision point
         float impactPoint = (ballY - playerY) / playerHeight; // Value between 0 (top) and 1 (bottom)
         ball->velocityY = (impactPoint - 0.5f) * 2;           // Adjust based on where the ball hits on the paddle
 
-        // Normalize velocity to keep consistent speed
+        // Normalize velocity to keep consistent moveSpeed
         float length = sqrt(ball->velocityX * ball->velocityX + ball->velocityY * ball->velocityY);
         if (length > 0)
         {
@@ -179,7 +178,7 @@ void PongBall_CollisionChecks(GameObject *ballObj, GameObject *targetObject)
 
         // player->score++;
         ball->lastHittingPlayer = player;
-        ball->speed += 0.1;
+        ball->moveSpeed += 0.1;
 
         // Move the ball outside the player's bounds based on ball's direction
         if (ball->velocityX > 0)

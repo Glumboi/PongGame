@@ -4,12 +4,12 @@ void Player_Init(Player *player)
 {
     if (!player)
         return;
-
     player->obj = GameObject_NewName("Player1");
     player->obj.OnStart = Player_OnStart;
     player->obj.OnUpdate = Player_OnUpdate;
     player->obj.location = (Location){10, GetScreenHeight() / 2 - PLAYER_HEIGHT};
     player->score = 0;
+    player->moveSpeed = PLAYER_SPEED;
 }
 
 void Player_OnStart(GameObject *obj)

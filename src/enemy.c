@@ -4,12 +4,12 @@ void Enemy_Init(Player *player2)
 {
     if (!player2)
         return;
-
-    player2->score = 0;
     player2->obj = GameObject_NewName("Player2");
     player2->obj.OnStart = Enemy_OnStart;
     player2->obj.OnUpdate = Enemy_OnUpdate;
     player2->obj.location = (Location){GetScreenWidth() - 35, GetScreenHeight() / 2 - PLAYER_HEIGHT};
+    player2->score = 0;
+    player2->moveSpeed = PLAYER_SPEED;
 }
 
 void Enemy_OnStart(GameObject *obj)
@@ -20,7 +20,7 @@ void Enemy_OnStart(GameObject *obj)
 void Enemy_OnUpdate(GameObject *obj)
 {
     Player_HandleMovement(obj, KEY_UP, KEY_DOWN);
-    
+
     // Set player2 to right screen bounds
     obj->location.x = GetScreenWidth() - 35;
 

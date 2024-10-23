@@ -8,21 +8,22 @@
 #define PLAYER_HEIGHT 200
 #define PLAYER_WIDTH 25
 #define SCORE_OFFSET_TOP 25
+#define PLAYER_SPEED 750
 
 typedef struct player
 {
     GameObject obj;
     int score;
+    float moveSpeed;
 } Player;
 
 inline void Player_HandleMovement(GameObject *obj, KeyboardKey up, KeyboardKey down)
 {
-    int moveSpeed = 8; 
-
+    float movement = ((Player *)obj)->moveSpeed * GetFrameTime();
     if (IsKeyDown(up))
-        obj->location.y -= moveSpeed;
+        obj->location.y -= movement; // Move up
     if (IsKeyDown(down))
-        obj->location.y += moveSpeed;
+        obj->location.y += movement; // Move down
 
     if (obj->location.y < 0)
         obj->location.y = 0;
@@ -44,5 +45,4 @@ inline void DrawRoundedRectangle(int x, int y, int width, int height, int radius
     DrawCircle(x + radius, y + height - radius, radius, color);         // Bottom-left corner
     DrawCircle(x + width - radius, y + height - radius, radius, color); // Bottom-right corner
 }
-
 #endif

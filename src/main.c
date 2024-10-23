@@ -9,6 +9,16 @@
 #include "player.h"
 #include "enemy.h"
 
+void RenderField(GameObject *obj)
+{
+    Vector2 start = {.x = GetScreenWidth() / 2, .y = 0};
+    Vector2 end = {.x = GetScreenWidth() / 2, .y = GetScreenHeight()};
+    DrawLineEx(start, end, 10, WHITE);
+
+    // Player 1 side
+    DrawRectangle(0, 0, GetScreenWidth() / 2, GetScreenHeight(), PINK);
+}
+
 int main(int argc, char const *argv[])
 {
     EngineWindow w;
@@ -16,6 +26,10 @@ int main(int argc, char const *argv[])
 
     Scene s;
     Scene_Create(&s, "Scene1");
+
+    GameObject field = GameObject_NewName("Field");
+    field.OnUpdate = RenderField;
+    Scene_AddGameObject(&s, &field);
 
     PongBall ball;
     PongBall_Init(&ball);

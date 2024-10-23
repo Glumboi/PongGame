@@ -15,7 +15,7 @@
 #include "player.h"
 
 #define BALL_SIZE 10
-#define BALL_SPEED 2.5f
+#define BALL_SPEED 400.0f
 #define WINDOW_WIDTH_SPEED_MULTIPLIER 500
 
 typedef struct pongBall
@@ -25,12 +25,12 @@ typedef struct pongBall
     int initLaunchDir;
     float velocityX;
     float velocityY;
-    float speed;
+    float moveSpeed;
 
     GameObject *player;
     GameObject *player2;
 
-    Player **lastHittingPlayer;
+    Player *lastHittingPlayer;
 } PongBall;
 
 // Standard functions
