@@ -1,23 +1,15 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include <stdio.h>
 #include <raylib.h>
-#include "game.h"
-#include "gameTypes.h"
-#include "actors.h"
-#include "customShapes.h"
 
-#define PLAYER_HEIGHT 200
-#define PLAYER_WIDTH 25
+#include "../engineCore/gameObject.h"
 
-void InitPlayer(Player *player, Game *game);
-void InitPlayerEx(Player *player, Game *game, int initX, int initY);
+#include "playerShared.h"
 
-void HandlePlayerMovement(GameObject *obj);
-void CheckPlayerScreenBounds(GameObject *obj);
+void Player_Init(Player *player);
 
-void RenderPlayer(GameObject *obj);
-void StartPlayer(GameObject *obj);
+void Player_OnStart(GameObject *obj);
+void Player_OnUpdate(GameObject *obj);
 
 #endif

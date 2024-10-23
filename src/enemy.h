@@ -1,24 +1,17 @@
 #ifndef ENEMY_H
 #define ENEMY_H
 
-#include <stdio.h>
 #include <raylib.h>
-#include "game.h"
-#include "gameTypes.h"
-#include "actors.h"
-#include "customShapes.h"
-#include "enemy.h"
 
-#define ENEMY_HEIGHT 200
-#define ENEMY_WIDTH 25
+#include "../engineCore/gameObject.h"
 
-void InitEnemy(Enemy *enemy, Game *game);
-void InitEnemyEx(Enemy *enemy, Game *game, int initX, int initY);
+#include "playerShared.h"
 
-void HandleEnemyMovement(GameObject *obj);
-void CheckEnemyScreenBounds(GameObject *obj);
+#define ENEMY_SCORE_OFFSET_LEFT 75
 
-void RenderEnemy(GameObject *obj);
-void StartEnemy(GameObject *obj);
+void Enemy_Init(Player *enemy);
+
+void Enemy_OnStart(GameObject *obj);
+void Enemy_OnUpdate(GameObject *obj);
 
 #endif

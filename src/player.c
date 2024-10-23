@@ -1,61 +1,39 @@
 #include "player.h"
 
-void InitPlayer(Player *player, Game *game)
+void Player_Init(Player *player)
 {
-    Location dfL = {10, GetScreenHeight() / 2 - PLAYER_HEIGHT};
-    InitPlayerEx(player, game, dfL.x, dfL.y);
-}
-
-void InitPlayerEx(Player *player, Game *game, int initX, int initY)
-{
-    if (!game)
+    if (!player)
         return;
-    player->scoreObject.obj.name = "Player";
-    player->scoreObject.obj.location.x = initX;
-    player->scoreObject.obj.location.y = initY;
-    player->scoreObject.obj.ObjectRender = RenderPlayer;
-    player->scoreObject.obj.ObjectStart = StartPlayer;
-    player->scoreObject.obj.isVisible = 1;
-    player->scoreObject.obj.parentGame = game;
-    player->scoreObject.score = 0;
-    GameAddGameObject(game, &player->scoreObject.obj);
+
+    player->obj = GameObject_NewName("Player1");
+    player->obj.OnStart = Player_OnStart;
+    player->obj.OnUpdate = Player_OnUpdate;
+    player->obj.location = (Location){10, GetScreenHeight() / 2 - PLAYER_HEIGHT};
+    player->score = 0;
 }
 
-void HandlePlayerMovement(GameObject *obj)
-{
-    // Movement
-    if (IsKeyDown(KEY_W))
-        obj->location.y -= 5;
-    if (IsKeyDown(KEY_S))
-        obj->location.y += 5;
-}
-
-void CheckPlayerScreenBounds(GameObject *obj)
-{
-    // Bounds checks
-    if (obj->location.y < 0)
-        obj->location.y = 0;
-    if (obj->location.y > GetScreenHeight() - PLAYER_HEIGHT)
-        obj->location.y = GetScreenHeight() - PLAYER_HEIGHT;
-}
-
-void RenderPlayer(GameObject *obj)
-{
-    HandlePlayerMovement(obj);
-    CheckPlayerScreenBounds(obj);
-
-    // Render
-    Player *player = (Player *)obj;
-    if (player->scoreObject.obj.isVisible)
-    {
-        DrawRoundedRectangle(player->scoreObject.obj.location.x, player->scoreObject.obj.location.y, PLAYER_WIDTH, PLAYER_HEIGHT, 10, WHITE);
-        DrawText(TextFormat("Score: %d", player->scoreObject.score),
-                 player->scoreObject.obj.location.x,
-                 player->scoreObject.obj.location.y - SCORE_OFFSET_TOP, 24, WHITE);
-    }
-}
-
-void StartPlayer(GameObject *obj)
+void Player_OnStart(GameObject *obj)
 {
     printf("Player started!\n");
+}
+
+void Player_OnUpdate(GameObject *obj)
+{
+    Player_HandleMovement(obj, KEY_W, KEY_S);
+
+    Player *player = (Player *)obj;
+    if (obj->isVisible)
+    {
+        DrawRoundedRectangle(
+            obj->location.x,
+            obj->location.y,
+            PLAYER_WIDTH,
+            PLAYER_HEIGHT,
+            10,
+            WHITE);
+
+        DrawText(TextFormat("Score: %d", player->score),
+                 obj->location.x,
+                 obj->location.y - SCORE_OFFSET_TOP, 24, WHITE);
+    }
 }

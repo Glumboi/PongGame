@@ -1,32 +1,35 @@
 #include <stdio.h>
-#include "../include/raylib.h"
-#include "game.h"
-#include "gameTypes.h"
+#include <raylib.h>
+
+#include "../engineCore/engineWindow.h"
+#include "../engineCore/gameObject.h"
+#include "../engineCore/scene.h"
+#include "pongBall.h"
 #include "player.h"
 #include "enemy.h"
-#include "ball.h"
 
-int WinMain(int argc, char const *argv[])
+int main(int argc, char const *argv[])
 {
-    WindowData wData = {"Pong game", 800, 600, FLAG_WINDOW_RESIZABLE};
+    EngineWindow w;
+    EngineWindow_Init(&w, 800, 600, "Test", FLAG_WINDOW_RESIZABLE);
 
-    Game g;
-    InitGame(&g, &wData);
+    Scene s;
+    Scene_Create(&s, "Scene1");
+
+    PongBall ball;
+    PongBall_Init(&ball);
+    Scene_AddGameObject(&s, &ball.obj);
 
     Player p;
-    InitPlayer(&p, &g);
+    Player_Init(&p);
+    Scene_AddGameObject(&s, &p.obj);
 
-    Enemy e;
-    InitEnemy(&e, &g);
+    Player p2;
+    Enemy_Init(&p2);
+    Scene_AddGameObject(&s, &p2.obj);
 
-    Ball b;
-    InitBall(&b, &g);
-
-    StartGame(&g);
-    while (!WindowShouldClose())
-    {
-        GameRender(&g);
-    }
+    EngineWindow_SetScene(&w, &s);
+    EingineWindow_RunMainLoop(&w);
 
     return 0;
 }

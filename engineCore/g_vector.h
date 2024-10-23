@@ -28,11 +28,11 @@ typedef struct g_vector
 
 // Vector Declaration Macro
 #define G_VECTOR_STRUCT(vectorType, structName) \
-    struct structName                           \
+    typedef struct                              \
     {                                           \
         struct g_vector_head head;              \
         vectorType *rawMem;                     \
-    }
+    } structName;
 
 #define G_VECTOR_OPAGUE(type, name) \
     struct name                     \
@@ -86,13 +86,18 @@ typedef struct g_vector
             vec.head.len += expandBy;                                                                  \
     }
 
-#define G_VECTOR_PUSH_BACK(type, vec, elementToAdd)                        \
-    {                                                                      \
-        if (vec.rawMem)                                                    \
-        {                                                                  \
-            G_VECTOR_EXPAND(type, vec, 1);                                 \
-            G_VECTOR_SET_INDEX(type, vec, elementToAdd, vec.head.len - 1); \
-        }                                                                  \
+#define G_VECTOR_PUSH_BACK(type, vec, elementToAdd)                    \
+    {                                                                  \
+        if (vec.rawMem)                                                \
+        {                                                              \
+            G_VECTOR_EXPAND(type, vec, 1);                             \
+        }                                                              \
+        else                                                           \
+        {                                                              \
+            vec.rawMem = MALLOC_DEBUG(sizeof(type));                   \
+            vec.head.len = 1;                                          \
+        }                                                              \
+        G_VECTOR_SET_INDEX(type, vec, elementToAdd, vec.head.len - 1); \
     }
 
 #define G_VECTOR_REMOVE_AT(type, vec, i)                                         \
