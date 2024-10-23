@@ -7,7 +7,6 @@ void PongBall_Init(PongBall *ball)
     ball->obj = GameObject_NewName("Ball");
     ball->obj.OnUpdate = PongBall_OnUpdate;
     ball->obj.OnStart = PongBall_OnStart;
-
     ball->velocityX = 0;
     ball->velocityY = 0;
     ball->speed = 0;
@@ -164,8 +163,6 @@ void PongBall_CollisionChecks(GameObject *ballObj, GameObject *targetObject)
         ball->velocityX = -ball->velocityX;
 
         // Adjust ball speed or direction based on collision point
-        // For example, if the ball hits near the top or bottom of the paddle,
-        // we can add a small angle variation to the Y velocity for a more dynamic game.
         float impactPoint = (ballY - playerY) / playerHeight; // Value between 0 (top) and 1 (bottom)
         ball->velocityY = (impactPoint - 0.5f) * 2;           // Adjust based on where the ball hits on the paddle
 
@@ -178,13 +175,18 @@ void PongBall_CollisionChecks(GameObject *ballObj, GameObject *targetObject)
         }
 
         player->score++;
-        ball->speed += 0.1; // Optionally increase speed after each hit
-    }
+        ball->speed += 0.1;
 
-    // Ball goes out of bounds on the left side (player misses it)
-    if (ballX < 0)
-    {
-        printf("Player missed the ball! Resetting...\n");
-        PongBall_Reset(ballObj);
+        // Move the ball outside the player's bounds based on ball's direction
+        if (ball->velocityX > 0)
+        {
+            // Ball is moving to the right, place it to the right of the paddle
+            ballObj->location.x = playerX + playerWidth + ballRadius;
+        }
+        else
+        {
+            // Ball is moving to the left, place it to the left of the paddle
+            ballObj->location.x = playerX - ballRadius;
+        }
     }
 }

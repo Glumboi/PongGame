@@ -4,6 +4,7 @@
 #include "../engineCore/engineWindow.h"
 #include "../engineCore/gameObject.h"
 #include "../engineCore/scene.h"
+
 #include "pongBall.h"
 #include "player.h"
 #include "enemy.h"
@@ -11,7 +12,7 @@
 int main(int argc, char const *argv[])
 {
     EngineWindow w;
-    EngineWindow_Init(&w, 800, 600, "Test", FLAG_WINDOW_RESIZABLE);
+    EngineWindow_Init(&w, 800, 600, "Pong", FLAG_WINDOW_RESIZABLE);
 
     Scene s;
     Scene_Create(&s, "Scene1");
