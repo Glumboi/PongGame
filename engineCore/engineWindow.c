@@ -9,7 +9,7 @@ void EngineWindow_Init(EngineWindow *window, int w, int h, char *title, unsigned
     window->h = h;
     window->title = title;
     window->flags = flags;
-
+    
     SetConfigFlags(window->flags);
     InitWindow(window->w, window->h, window->title);
 }

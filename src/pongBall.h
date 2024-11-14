@@ -5,12 +5,12 @@
 #define M_PI 3.14159265358979323846
 #endif
 
-#include <raylib.h>
 #include <math.h>
+#include <raylib.h>
 
-#include "../engineCore/scene.h"
 #include "../engineCore/engineTypes.h"
 #include "../engineCore/gameObject.h"
+#include "../engineCore/scene.h"
 
 #include "player.h"
 
@@ -20,20 +20,19 @@
 
 extern struct player;
 
-typedef struct pongBall
-{
-    GameObject obj;
+typedef struct pongBall {
+  GameObject obj;
 
-    int initLaunchDir;
-    float velocityX;
-    float velocityY;
-    float moveSpeed;
-    uint8_t hasAnyPlayerPressedAButton;
+  int initLaunchDir;
+  float velocityX;
+  float velocityY;
+  float moveSpeed;
+  uint8_t hasAnyPlayerPressedAButton;
 
-    GameObject *player;
-    GameObject *player2;
+  GameObject *player;
+  GameObject *player2;
 
-    struct player *lastHittingPlayer;
+  struct player *lastHittingPlayer;
 } PongBall;
 
 // Standard functions

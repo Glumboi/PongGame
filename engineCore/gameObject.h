@@ -2,6 +2,7 @@
 #define GAMEOBJECT_H
 
 #include <stdint.h>
+#include <string.h>
 
 #include "engineTypes.h"
 
@@ -23,6 +24,7 @@ typedef struct gameObject
 GameObject GameObject_NewName(char *name);
 
 void GameObject_New(GameObject *out);
+
 void GameObject_OnUpdate(GameObject *out);
 void GameObject_OnStart(GameObject *out);
 void GameObject_OnDestroy(GameObject *out);

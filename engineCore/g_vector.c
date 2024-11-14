@@ -18,12 +18,12 @@ void *MallocDebug(size_t size)
     return ret;
 }
 
-int g_vector_start(g_vector_t *vec)
+size_t g_vector_start(g_vector_t *vec)
 {
     return 0;
 }
 
-int g_vector_end(g_vector_t *vec)
+size_t g_vector_end(g_vector_t *vec)
 {
     if (!vec)
         return 0;

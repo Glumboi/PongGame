@@ -183,8 +183,8 @@ typedef struct g_vector
 // Iterator Macro for Looping Through Vector
 #define G_VECTOR_FOR(vec, iVar) G_VECTOR_FOR_INDEX(vec, iVar)
 
-int g_vector_start(g_vector_t *vec);
-int g_vector_end(g_vector_t *vec);
+size_t g_vector_start(g_vector_t *vec);
+size_t g_vector_end(g_vector_t *vec);
 
 // Function to Initialize Vector
 void g_vector_init(void *outVec, size_t len);

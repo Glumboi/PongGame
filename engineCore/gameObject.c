@@ -3,7 +3,7 @@
 GameObject GameObject_NewName(char *name)
 {
     GameObject obj;
-    obj.name = strdup(name);
+    obj.name = NULL;
     obj.isVisible = 1;
     obj.location = (Location){0, 0};
     obj.OnUpdate = GameObject_OnUpdate;
