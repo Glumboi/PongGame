@@ -1,5 +1,5 @@
 # Choose the platform: "linux" or "windows"
-PLATFORM ?= linux
+PLATFORM ?= windows
 
 # Compiler and Flags
 CC=gcc
